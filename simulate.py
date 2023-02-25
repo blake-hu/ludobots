@@ -32,8 +32,15 @@ def simulate():
             bodyIndex=robotId,
             jointName="Torso_BackLeg",
             controlMode=pyb.POSITION_CONTROL,
-            targetPosition=0.0,
-            maxForce=500,
+            targetPosition=-np.pi/4.0,
+            maxForce=50,
+        )
+        pyrosim.Set_Motor_For_Joint(
+            bodyIndex=robotId,
+            jointName="Torso_FrontLeg",
+            controlMode=pyb.POSITION_CONTROL,
+            targetPosition=np.pi/4.0,
+            maxForce=50,
         )
 
         if i % 100 == 0:
