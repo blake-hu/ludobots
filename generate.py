@@ -7,6 +7,10 @@ x = 0
 y = 0
 z = height / 2
 
-pyrosim.Start_SDF("world.sdf")
-pyrosim.Send_Cube(name="Box-1", pos=[x, y, z], size=[length, width, height])
-pyrosim.End()
+def Create_World():
+    pyrosim.Start_SDF("world.sdf")
+    pyrosim.Send_Cube(name="Box-1", pos=[x, y, z], size=[length, width, height])
+    pyrosim.End()
+
+if __name__ == "__main__":
+    Create_World()
