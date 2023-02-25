@@ -11,7 +11,7 @@ def simulate():
 
 	p.setGravity(0, 0, -9.8)
 
-	duration = 10 # Simulation duration in seconds
+	duration = 100 # Simulation duration in seconds
 	print("Simulating for " + str(duration) + " seconds")
 	for i in range(duration*100):
 		p.stepSimulation()

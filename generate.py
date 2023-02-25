@@ -1,8 +1,9 @@
 import pyrosim.pyrosim as pyrosim
 
-length = 1
-width = 1
-height = 1
+scale = 1
+length = scale
+width = scale * 0.5
+height = scale
 
 def Create_World():
     pyrosim.Start_SDF("world.sdf")
@@ -12,8 +13,18 @@ def Create_World():
 def Create_Robot():
     pyrosim.Start_URDF("body.urdf")
     pyrosim.Send_Cube(name="Link0", pos=[0, 0, height/2], size=[length, width, height])
-    pyrosim.Send_Cube(name="Link1", pos=[0, 0, height/2], size=[length, width, height])
     pyrosim.Send_Joint(name="Link0_Link1", parent="Link0", child="Link1", type="revolute", position=[0, 0, height])
+    pyrosim.Send_Cube(name="Link1", pos=[0, 0, height/2], size=[length, width, height])
+    pyrosim.Send_Joint(name="Link1_Link2", parent="Link1", child="Link2", type="revolute", position=[0, 0, height])
+    pyrosim.Send_Cube(name="Link2", pos=[0, 0, height/2], size=[length, width, height])
+    pyrosim.Send_Joint(name="Link2_Link3", parent="Link2", child="Link3", type="revolute", position=[0, width/2, height/2])
+    pyrosim.Send_Cube(name="Link3", pos=[0, width/2, 0], size=[length, width, height])
+    pyrosim.Send_Joint(name="Link3_Link4", parent="Link3", child="Link4", type="revolute", position=[0, width, 0])
+    pyrosim.Send_Cube(name="Link4", pos=[0, width/2, 0], size=[length, width, height])
+    pyrosim.Send_Joint(name="Link4_Link5", parent="Link4", child="Link5", type="revolute", position=[0, width/2, -height/2])
+    pyrosim.Send_Cube(name="Link5", pos=[0, 0, -height/2], size=[length, width, height])
+    pyrosim.Send_Joint(name="Link5_Link6", parent="Link5", child="Link6", type="revolute", position=[0, 0, -height])
+    pyrosim.Send_Cube(name="Link6", pos=[0, 0, -height/2], size=[length, width, height])
     pyrosim.End()
 
 if __name__ == "__main__":
