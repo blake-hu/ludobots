@@ -1,20 +1,20 @@
 import pyrosim.pyrosim as pyrosim
-import pybullet
+import pybullet as pyb
 import pybullet_data
 import numpy as np
 import time as time
 
 
 def simulate():
-    physicsClient = pybullet.connect(pybullet.GUI)
-    pybullet.setAdditionalSearchPath(pybullet_data.getDataPath())
-    planeId = pybullet.loadURDF("plane.urdf")
-    robotId = pybullet.loadURDF("body.urdf")
-    pybullet.loadSDF("world.sdf")
+    physicsClient = pyb.connect(pyb.GUI)
+    pyb.setAdditionalSearchPath(pybullet_data.getDataPath())
+    planeId = pyb.loadURDF("plane.urdf")
+    robotId = pyb.loadURDF("body.urdf")
+    pyb.loadSDF("world.sdf")
 
-    pybullet.setGravity(0, 0, -9.8)
+    pyb.setGravity(0, 0, -9.8)
 
-    duration = 5  # Simulation duration in seconds
+    duration = 10  # Simulation duration in seconds
     steps = duration * 100
     print("Simulating for " + str(duration) + " seconds")
 
@@ -23,11 +23,18 @@ def simulate():
     backLegSensorValues = np.zeros(steps)
 
     for i in range(steps):
-        pybullet.stepSimulation()
+        pyb.stepSimulation()
         frontLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link(
             "FrontLeg")
         backLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link(
             "BackLeg")
+        pyrosim.Set_Motor_For_Joint(
+            bodyIndex=robotId,
+            jointName="Torso_BackLeg",
+            controlMode=pyb.POSITION_CONTROL,
+            targetPosition=0.0,
+            maxForce=500,
+        )
 
         if i % 100 == 0:
             print("Time elapsed: " + str(i/100) + "s")
@@ -35,7 +42,7 @@ def simulate():
 
     np.save("./data/frontLegSensorValues.npy", frontLegSensorValues)
     np.save("./data/backLegSensorValues.npy", backLegSensorValues)
-    pybullet.disconnect()
+    pyb.disconnect()
 
 
 if __name__ == "__main__":
