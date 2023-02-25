@@ -6,13 +6,17 @@ def simulate():
 	physicsClient = p.connect(p.GUI)
 	p.setAdditionalSearchPath(pybullet_data.getDataPath())
 	planeId = p.loadURDF("plane.urdf")
+	robotId = p.loadURDF("body.urdf")
 	p.loadSDF("world.sdf")
 
 	p.setGravity(0, 0, -9.8)
 
-	for i in range(10000):
+	duration = 10 # Simulation duration in seconds
+	print("Simulating for " + str(duration) + " seconds")
+	for i in range(duration*100):
 		p.stepSimulation()
-		print("step: " + str(i))
+		if i % 100 == 0:
+			print("Time elapsed: " + str(i/100) + "s")
 		time.sleep(0.001)
 
 	p.disconnect()
