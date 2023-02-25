@@ -130,3 +130,9 @@ dmypy.json
 
 # VS code files
 .vscode/
+
+# all pyrosim data generated
+*.npy
+
+# macOS related files
+.DS_Store
