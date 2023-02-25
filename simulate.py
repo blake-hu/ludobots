@@ -3,6 +3,8 @@ import pybullet as pyb
 import pybullet_data
 import numpy as np
 import time as time
+import random
+# import matplotlib.pyplot as plt
 
 
 def simulate():
@@ -22,6 +24,14 @@ def simulate():
     frontLegSensorValues = np.zeros(steps)
     backLegSensorValues = np.zeros(steps)
 
+    gridpoints = np.linspace(0, 2*np.pi, 100)
+    frontLegCommand = np.sin(gridpoints)*np.pi/4
+    backLegCommand = np.sin(gridpoints+np.pi/4)*np.pi/4
+    # plt.plot(frontLegCommand)
+    # plt.plot(backLegCommand)
+    # plt.show()
+    # exit()
+
     for i in range(steps):
         pyb.stepSimulation()
         frontLegSensorValues[i] = pyrosim.Get_Touch_Sensor_Value_For_Link(
@@ -32,14 +42,14 @@ def simulate():
             bodyIndex=robotId,
             jointName="Torso_BackLeg",
             controlMode=pyb.POSITION_CONTROL,
-            targetPosition=-np.pi/4.0,
+            targetPosition=frontLegCommand[i % len(gridpoints)],
             maxForce=50,
         )
         pyrosim.Set_Motor_For_Joint(
             bodyIndex=robotId,
             jointName="Torso_FrontLeg",
             controlMode=pyb.POSITION_CONTROL,
-            targetPosition=np.pi/4.0,
+            targetPosition=backLegCommand[i % len(gridpoints)],
             maxForce=50,
         )
 

@@ -18,13 +18,13 @@ def Create_Robot():
     pyrosim.Send_Cube(name="Torso", pos=[
                       0, 0, height*1.5], size=[length, width, height])
     pyrosim.Send_Joint(name="Torso_BackLeg", parent="Torso",
-                       child="BackLeg", type="revolute", position=[0, -width/2, height])
+                       child="BackLeg", type="revolute", position=[-length/2, 0, height])
     pyrosim.Send_Joint(name="Torso_FrontLeg", parent="Torso",
-                       child="FrontLeg", type="revolute", position=[0, width/2, height])
+                       child="FrontLeg", type="revolute", position=[length/2, 0, height])
     pyrosim.Send_Cube(name="BackLeg", pos=[
-                      0, -width/2, -height/2], size=[length, width, height])
+                      -length/2, 0, -height/2], size=[length, width, height])
     pyrosim.Send_Cube(name="FrontLeg", pos=[
-                      0, width/2, -height/2], size=[length, width, height])
+                      length/2, 0, -height/2], size=[length, width, height])
 
     pyrosim.End()
 
