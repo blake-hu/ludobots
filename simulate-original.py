@@ -12,7 +12,10 @@ from simulation import SIMULATION
 
 def simulate():
     simulation = SIMULATION()
-    simulation.run()
+
+    np.save("./data/frontLegSensorValues.npy", frontLegSensorValues)
+    np.save("./data/backLegSensorValues.npy", backLegSensorValues)
+    pyb.disconnect()
 
 
 if __name__ == "__main__":
