@@ -12,7 +12,7 @@ from simulation import SIMULATION
 
 def simulate():
     simulation = SIMULATION()
-    simulation.run()
+    simulation.Run()
 
 
 if __name__ == "__main__":

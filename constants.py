@@ -1,7 +1,7 @@
 import numpy as np
 
 # For simulation
-duration = 10  # Simulation duration in seconds
+duration = 3  # Simulation duration in seconds
 steps = duration * 100
 
 # For motor control
