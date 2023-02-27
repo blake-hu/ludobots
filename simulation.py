@@ -34,9 +34,9 @@ class SIMULATION:
             self.robot.Think()
             self.robot.Act(step)
 
-            if step % 100 == 0:
-                print("Time elapsed: " + str(step/100) + "s")
-            time.sleep(0.001)
+            if step % c.resolution == 0:
+                print("Time elapsed: " + str(step/c.resolution) + "s")
+            time.sleep(1 / c.resolution)
 
         self.robot.Save_Sensor_Values(c.save_dir)
         print("Saved motor and sensor values")
