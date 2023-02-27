@@ -13,7 +13,6 @@ from robot import ROBOT
 
 class SIMULATION:
     def __init__(self):
-
         self.physicsClient = pyb.connect(pyb.GUI)
         pyb.setAdditionalSearchPath(pybullet_data.getDataPath())
         pyb.setGravity(0, 0, c.gravity)
@@ -29,26 +28,15 @@ class SIMULATION:
         print("pybullet simulator disconnected")
 
     def Run(self):
-
         for step in range(c.steps):
             pyb.stepSimulation()
             self.robot.Sense(step)
-
-            # pyrosim.Set_Motor_For_Joint(
-            #     bodyIndex=robotId,
-            #     jointName="Torso_BackLeg",
-            #     controlMode=pyb.POSITION_CONTROL,
-            #     targetPosition=c.frontLegCommand[step % c.num_gridpoints],
-            #     maxForce=50,
-            # )
-            # pyrosim.Set_Motor_For_Joint(
-            #     bodyIndex=robotId,
-            #     jointName="Torso_FrontLeg",
-            #     controlMode=pyb.POSITION_CONTROL,
-            #     targetPosition=c.backLegCommand[step % c.num_gridpoints],
-            #     maxForce=50,
-            # )
+            self.robot.Act(step)
 
             if step % 100 == 0:
                 print("Time elapsed: " + str(step/100) + "s")
             time.sleep(0.001)
+
+        self.robot.Save_Motor_Values(c.save_dir)
+        self.robot.Save_Sensor_Values(c.save_dir)
+        print("Saved motor and sensor values")
