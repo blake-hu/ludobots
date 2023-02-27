@@ -1,4 +1,5 @@
 import pyrosim.pyrosim as pyrosim
+from pyrosim.neuralNetwork import NEURAL_NETWORK
 import pybullet as pyb
 import pybullet_data
 
@@ -11,8 +12,8 @@ class ROBOT:
     def __init__(self):
         self.robotId = pyb.loadURDF("body.urdf")
         pyrosim.Prepare_To_Simulate(self.robotId)
-
         self.Prepare_To_Sense()
+        self.nn = NEURAL_NETWORK("brain.nndf")
         self.Prepare_To_Act()
 
     def Prepare_To_Sense(self):
@@ -29,22 +30,20 @@ class ROBOT:
         for linkName in self.sensors:
             self.sensors[linkName].Save_Values(dir_path)
 
+    def Think(self):
+        self.nn.Update()
+        self.nn.Print()
+
     def Prepare_To_Act(self):
         self.motors = {}
         for jointName in pyrosim.jointNamesToIndices:
             self.motors[jointName] = MOTOR(jointName)
-            if jointName == "Torso_FrontLeg":
-                self.motors[jointName].Prepare_To_Act(
-                    c.amplitude, c.frequency*5, c.offset, c.maxForce)
-            else:
-                self.motors[jointName].Prepare_To_Act(
-                    c.amplitude, c.frequency, c.offset, c.maxForce)
             print("motor loaded for: " + jointName)
 
     def Act(self, step):
-        for jointName in self.motors:
-            self.motors[jointName].Set_Value(step, self.robotId)
-
-    def Save_Motor_Values(self, dir_path):
-        for jointName in self.motors:
-            self.motors[jointName].Save_Values(dir_path)
+        for neuronName in self.nn.Get_Neuron_Names().keys():
+            if self.nn.Is_Motor_Neuron(neuronName):
+                jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
+                desiredAngle = self.nn.Get_Value_Of(neuronName)
+                self.motors[jointName].Set_Value(self.robotId, desiredAngle)
+                print(jointName + " moving to " + str(desiredAngle))

@@ -31,12 +31,12 @@ class SIMULATION:
         for step in range(c.steps):
             pyb.stepSimulation()
             self.robot.Sense(step)
+            self.robot.Think()
             self.robot.Act(step)
 
             if step % 100 == 0:
                 print("Time elapsed: " + str(step/100) + "s")
             time.sleep(0.001)
 
-        self.robot.Save_Motor_Values(c.save_dir)
         self.robot.Save_Sensor_Values(c.save_dir)
         print("Saved motor and sensor values")
